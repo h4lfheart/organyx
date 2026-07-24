@@ -12,4 +12,5 @@ public class Status : BaseModel
     [Column("project_id")] public Guid ProjectId { get; set; }
     [Column("name")] public string Name { get; set; } = string.Empty;
     [Column("position")] public int Position { get; set; }
+    [Column("is_default")] public bool IsDefault { get; set; }
 }

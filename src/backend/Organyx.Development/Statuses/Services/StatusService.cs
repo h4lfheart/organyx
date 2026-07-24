@@ -43,6 +43,9 @@ public class StatusService(
         if (await projectRepository.GetByIdAsync(projectId) is null)
             throw new NotFoundException("Project not found.");
 
+        if (request.IsDefault)
+            await statusRepository.ClearDefaultForProjectAsync(projectId);
+
         var created = await statusRepository.InsertAsync(request.ToTable(projectId))
                       ?? throw new InvalidOperationException("Failed to create status.");
         return created.Id;
@@ -50,17 +53,28 @@ public class StatusService(
 
     public async Task UpdateAsync(Guid statusId, UpdateStatusRequest request)
     {
-        if (await statusRepository.GetByIdAsync(statusId) is null)
-            throw new NotFoundException("Status not found.");
+        var existing = await statusRepository.GetByIdAsync(statusId)
+                       ?? throw new NotFoundException("Status not found.");
 
-        _ = await statusRepository.UpdateAsync(statusId, request.Name, request.Position)
+        if (existing.IsDefault && !request.IsDefault)
+            throw new BusinessRuleException(
+                "Cannot unset the default status. Set another status as default first.");
+
+        if (request.IsDefault && !existing.IsDefault)
+            await statusRepository.ClearDefaultForProjectAsync(existing.ProjectId, statusId);
+
+        _ = await statusRepository.UpdateAsync(statusId, request.Name, request.Position, request.IsDefault)
             ?? throw new NotFoundException("Status not found.");
     }
 
     public async Task DeleteAsync(Guid statusId)
     {
-        if (await statusRepository.GetByIdAsync(statusId) is null)
-            throw new NotFoundException("Status not found.");
+        var existing = await statusRepository.GetByIdAsync(statusId)
+                       ?? throw new NotFoundException("Status not found.");
+
+        if (existing.IsDefault)
+            throw new BusinessRuleException(
+                "Cannot delete the default status. Set another status as default first.");
 
         await statusRepository.DeleteAsync(statusId);
     }

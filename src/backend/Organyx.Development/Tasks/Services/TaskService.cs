@@ -67,9 +67,17 @@ public class TaskService(
         if (await projectRepository.GetByIdAsync(projectId) is null)
             throw new NotFoundException("Project not found.");
 
-        await ValidateReferencesAsync(projectId, request.FeatureId, request.StatusId);
+        var statusId = request.StatusId;
+        if (statusId is null)
+        {
+            var defaultStatus = await statusRepository.GetDefaultByProjectIdAsync(projectId)
+                                ?? throw new BusinessRuleException("Project has no default status.");
+            statusId = defaultStatus.Id;
+        }
 
-        var created = await taskRepository.InsertAsync(request.ToTable(projectId))
+        await ValidateReferencesAsync(projectId, request.FeatureId, statusId);
+
+        var created = await taskRepository.InsertAsync(request.ToTable(projectId, statusId.Value))
                       ?? throw new InvalidOperationException("Failed to create task.");
         return created.Id;
     }
