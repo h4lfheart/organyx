@@ -5,6 +5,8 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 
+import { NotFoundPage } from "#components/not-found";
+
 import "../styles.css";
 
 export const Route = createRootRouteWithContext<{
@@ -30,6 +32,7 @@ export const Route = createRootRouteWithContext<{
 			},
 		],
 	}),
+	notFoundComponent: NotFoundPage,
 	shellComponent: RootDocument,
 });
 

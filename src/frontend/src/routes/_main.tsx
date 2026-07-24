@@ -1,9 +1,4 @@
-import {
-	createFileRoute,
-	Link,
-	Outlet,
-	useRouterState,
-} from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import {
 	ChevronRight,
 	FolderKanban,
@@ -48,8 +43,11 @@ const workspaceItems = [
 	{ title: "Projects", icon: FolderKanban, to: "/projects" },
 ] as const;
 
+/** Exact path match; drive SidebarMenuButton's data-active via Link. */
+const navActiveOptions = { exact: true, includeSearch: false } as const;
+const navActiveProps = { "data-active": "" } as const;
+
 function MainLayout() {
-	const pathname = useRouterState({ select: (s) => s.location.pathname });
 	const { data, isPending, isError } = useProjects();
 	const projects = data?.entries ?? [];
 
@@ -83,12 +81,12 @@ function MainLayout() {
 									{workspaceItems.map((item) => (
 										<SidebarMenuItem key={item.title}>
 											<SidebarMenuButton
-												render={<Link to={item.to} />}
-												isActive={
-													item.to === "/projects"
-														? pathname === "/projects" ||
-															pathname === "/projects/"
-														: pathname === item.to
+												render={
+													<Link
+														to={item.to}
+														activeOptions={navActiveOptions}
+														activeProps={navActiveProps}
+													/>
 												}
 											>
 												<item.icon />
@@ -130,10 +128,7 @@ function MainLayout() {
 							</SidebarGroup>
 						) : (
 							projects.map((project) => (
-								<Collapsible
-									key={project.id}
-									className="group/collapsible"
-								>
+								<Collapsible key={project.id} className="group/collapsible">
 									<SidebarGroup className="gap-0.5 py-0.5">
 										<SidebarGroupLabel
 											render={<CollapsibleTrigger />}
@@ -144,18 +139,16 @@ function MainLayout() {
 										</SidebarGroupLabel>
 										<CollapsibleContent>
 											<SidebarGroupContent>
-												<SidebarMenu className="gap-0">
+												<SidebarMenu className="gap-1">
 													<SidebarMenuItem>
 														<SidebarMenuButton
 															render={
 																<Link
 																	to="/projects/$projectSlug"
 																	params={{ projectSlug: project.slug }}
+																	activeOptions={navActiveOptions}
+																	activeProps={navActiveProps}
 																/>
-															}
-															isActive={
-																pathname === `/projects/${project.slug}` ||
-																pathname === `/projects/${project.slug}/`
 															}
 														>
 															<PanelTop />
@@ -168,10 +161,9 @@ function MainLayout() {
 																<Link
 																	to="/projects/$projectSlug/board"
 																	params={{ projectSlug: project.slug }}
+																	activeOptions={navActiveOptions}
+																	activeProps={navActiveProps}
 																/>
-															}
-															isActive={
-																pathname === `/projects/${project.slug}/board`
 															}
 														>
 															<LayoutDashboard />
@@ -184,11 +176,9 @@ function MainLayout() {
 																<Link
 																	to="/projects/$projectSlug/features"
 																	params={{ projectSlug: project.slug }}
+																	activeOptions={navActiveOptions}
+																	activeProps={navActiveProps}
 																/>
-															}
-															isActive={
-																pathname ===
-																`/projects/${project.slug}/features`
 															}
 														>
 															<Layers />
@@ -208,8 +198,13 @@ function MainLayout() {
 						<SidebarMenu className="gap-1">
 							<SidebarMenuItem>
 								<SidebarMenuButton
-									render={<Link to="/settings" />}
-									isActive={pathname === "/settings"}
+									render={
+										<Link
+											to="/settings"
+											activeOptions={navActiveOptions}
+											activeProps={navActiveProps}
+										/>
+									}
 								>
 									<Settings />
 									<span>Settings</span>
@@ -219,7 +214,7 @@ function MainLayout() {
 					</SidebarFooter>
 				</Sidebar>
 
-				<SidebarInset>
+				<SidebarInset className="border-l-2 border-border">
 					<Outlet />
 				</SidebarInset>
 			</SidebarProvider>
