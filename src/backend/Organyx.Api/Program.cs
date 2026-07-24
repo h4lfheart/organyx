@@ -1,7 +1,10 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
-using Organyx.Application;
+using Organyx.Api;
+using Organyx.Development;
 using Organyx.Infrastructure;
+using Organyx.Infrastructure.Errors;
+using Organyx.Infrastructure.Validation;
 using Organyx.Infrastructure.Services;
 using Scalar.AspNetCore;
 using Serilog;
@@ -30,22 +33,34 @@ builder.Services.AddSerilog((services, config) => config
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .WriteTo.Console());
 
-builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
+builder.Services.AddOrganyxOpenApi();
 
-builder.Services.AddControllers()
-    .AddJsonOptions(o =>
-    {
-        o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    })
-    .AddApplicationPart(typeof(ApplicationIocConfiguration).Assembly);
+builder.Services
+    .AddControllers(o =>  o.Filters.Add<FluentValidationActionFilter>())
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+    .AddApplicationPart(typeof(DevelopmentIocConfiguration).Assembly);
 
-builder.Services.AddApplicationIoc();
+builder.Services.AddDevelopmentIoc();
 builder.Services.AddInfrastructureIoc();
 
 var app = builder.Build();
 
 var supabaseService = app.Services.GetRequiredService<SupabaseService>();
 await supabaseService.InitializeAsync();
+
+app.UseExceptionHandler(new ExceptionHandlerOptions
+{
+    StatusCodeSelector = ex => ex switch
+    {
+        NotFoundException => StatusCodes.Status404NotFound,
+        ConflictException => StatusCodes.Status409Conflict,
+        BusinessRuleException => StatusCodes.Status400BadRequest,
+        BadHttpRequestException e => e.StatusCode,
+        _ => StatusCodes.Status500InternalServerError
+    }
+});
+app.UseStatusCodePages();
 
 app.UseSerilogRequestLogging();
 
@@ -55,6 +70,7 @@ app.MapScalarApiReference(options =>
     options.Title = "Organyx API";
     options.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient>(ScalarTarget.CSharp, ScalarClient.HttpClient);
     options.Layout = ScalarLayout.Classic;
+    options.AddOrganyxDocuments();
 });
 
 app.MapControllers();

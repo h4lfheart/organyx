@@ -4,7 +4,7 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/Backend/">
-    <Project Path="Organyx.Application/Organyx.Application.csproj" />
+    <Project Path="Organyx.Development/Organyx.Development.csproj" />
     <Project Path="Organyx.Infrastructure/Organyx.Infrastructure.csproj" />
     <Project Path="Organyx.Api/Organyx.Api.csproj" />
   </Folder>

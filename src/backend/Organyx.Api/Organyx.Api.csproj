@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Organyx.Application\Organyx.Application.csproj" />
+        <ProjectReference Include="..\Organyx.Development\Organyx.Development.csproj" />
     </ItemGroup>
 
 </Project>
