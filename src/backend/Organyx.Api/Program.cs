@@ -24,6 +24,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var backendPort = Environment.GetEnvironmentVariable("BACKEND_PORT")
     ?? throw new InvalidOperationException("BACKEND_PORT is required. Set it in .env.local.");
+var frontendPort = Environment.GetEnvironmentVariable("FRONTEND_PORT")
+    ?? throw new InvalidOperationException("FRONTEND_PORT is required. Set it in .env.local.");
 
 builder.WebHost.UseUrls($"http://127.0.0.1:{backendPort}");
 
@@ -40,6 +42,16 @@ builder.Services
     .AddControllers(o =>  o.Filters.Add<FluentValidationActionFilter>())
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
     .AddApplicationPart(typeof(DevelopmentIocConfiguration).Assembly);
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.WithOrigins(
+                $"http://127.0.0.1:{frontendPort}",
+                $"http://localhost:{frontendPort}")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 
 builder.Services.AddDevelopmentIoc();
 builder.Services.AddInfrastructureIoc();
@@ -63,6 +75,7 @@ app.UseExceptionHandler(new ExceptionHandlerOptions
 app.UseStatusCodePages();
 
 app.UseSerilogRequestLogging();
+app.UseCors();
 
 app.MapOpenApi();
 app.MapScalarApiReference(options =>

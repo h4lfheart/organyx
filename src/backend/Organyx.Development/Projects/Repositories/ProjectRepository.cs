@@ -9,6 +9,7 @@ public interface IProjectRepository
     Task<IReadOnlyList<Project>> GetAllAsync();
     Task<Project?> GetByIdAsync(Guid projectId);
     Task<Project?> GetByKeyAsync(string key);
+    Task<Project?> GetBySlugAsync(string slug);
     Task<Project?> InsertAsync(Project project);
     Task<Project?> UpdateAsync(Guid projectId, string name, string? description);
     Task DeleteAsync(Guid projectId);
@@ -36,6 +37,14 @@ public class ProjectRepository(SupabaseService supabaseService) : IProjectReposi
     {
         var result = await supabaseService.Client.From<Project>()
             .Where(x => x.Key == key)
+            .Get();
+        return result.Models.FirstOrDefault();
+    }
+
+    public async Task<Project?> GetBySlugAsync(string slug)
+    {
+        var result = await supabaseService.Client.From<Project>()
+            .Where(x => x.Slug == slug)
             .Get();
         return result.Models.FirstOrDefault();
     }

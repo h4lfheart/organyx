@@ -10,6 +10,7 @@ public class Project : BaseModel
     public Guid Id { get; set; }
 
     [Column("key")] public string Key { get; set; } = string.Empty;
+    [Column("slug")] public string Slug { get; set; } = string.Empty;
     [Column("name")] public string Name { get; set; } = string.Empty;
     [Column("description")] public string? Description { get; set; }
 

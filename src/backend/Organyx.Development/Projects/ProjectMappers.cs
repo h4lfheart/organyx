@@ -7,9 +7,10 @@ public static class ProjectMappers
 {
     extension(CreateProjectRequest request)
     {
-        public Project ToTable() => new()
+        public Project ToTable(string slug) => new()
         {
             Key = request.Key.Trim().ToUpperInvariant(),
+            Slug = slug,
             Name = request.Name,
             Description = request.Description
         };
@@ -21,6 +22,7 @@ public static class ProjectMappers
         {
             Id = project.Id,
             Key = project.Key,
+            Slug = project.Slug,
             Name = project.Name,
             Description = project.Description
         };

@@ -37,7 +37,11 @@ public class ProjectService(IProjectRepository projectRepository) : IProjectServ
         if (await projectRepository.GetByKeyAsync(key) is not null)
             throw new ConflictException($"Project key '{key}' already exists.");
 
-        var created = await projectRepository.InsertAsync(request.ToTable())
+        var slug = request.Slug.Trim();
+        if (await projectRepository.GetBySlugAsync(slug) is not null)
+            throw new ConflictException($"Project slug '{slug}' already exists.");
+
+        var created = await projectRepository.InsertAsync(request.ToTable(slug))
                       ?? throw new InvalidOperationException("Failed to create project.");
         return created.Id;
     }

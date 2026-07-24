@@ -1,5 +1,5 @@
-insert into projects (id, key, name, description) values
-  ('00000000-0000-0000-0000-000000000001', 'ORG', 'Organyx', 'The project roadmap for Organyx');
+insert into projects (id, key, slug, name, description) values
+  ('00000000-0000-0000-0000-000000000001', 'ORG', 'organyx', 'Organyx', 'The project roadmap for Organyx');
 
 insert into features (project_id, name, description) values
   ('00000000-0000-0000-0000-000000000001', 'Authentication', 'The user system.'),
