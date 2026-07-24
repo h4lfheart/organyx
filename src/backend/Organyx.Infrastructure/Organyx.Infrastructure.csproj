@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Supabase" />
+        <PackageReference Include="Supabase.Postgrest" />
+        <PackageReference Include="Serilog" />
+    </ItemGroup>
+
+</Project>

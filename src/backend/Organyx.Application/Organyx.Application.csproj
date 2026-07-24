@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Supabase" />
+        <PackageReference Include="Supabase.Postgrest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Organyx.Infrastructure\Organyx.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

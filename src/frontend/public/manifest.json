@@ -1,0 +1,10 @@
+{
+  "short_name": "Organyx",
+  "name": "Organyx",
+  "description": "Lightweight, self-hosted project management for developers.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "lang": "en"
+}

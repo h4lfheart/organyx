@@ -1,0 +1,26 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+
+    <ItemGroup Label="OpenAPI">
+        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+        <PackageVersion Include="Microsoft.OpenApi" Version="2.11.0" />
+        <PackageVersion Include="Scalar.AspNetCore" Version="2.5.5" />
+    </ItemGroup>
+
+    <ItemGroup Label="Logging">
+        <PackageVersion Include="Serilog" Version="4.2.0" />
+        <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+        <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Label="Supabase">
+        <PackageVersion Include="Supabase" Version="1.1.1" />
+        <PackageVersion Include="Supabase.Postgrest" Version="4.0.3" />
+    </ItemGroup>
+
+    <ItemGroup Label="Environment">
+        <PackageVersion Include="DotNetEnv" Version="3.1.1" />
+    </ItemGroup>
+</Project>
