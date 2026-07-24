@@ -7,14 +7,14 @@ public static class TaskMappers
 {
     extension(CreateTaskRequest request)
     {
-        public ProjectTask ToTable(Guid projectId) => new()
+        public ProjectTask ToTable(Guid projectId, Guid statusId) => new()
         {
             ProjectId = projectId,
             Title = request.Title,
             Description = request.Description,
             Priority = PriorityMapping.ToDatabase(request.Priority),
             FeatureId = request.FeatureId,
-            StatusId = request.StatusId
+            StatusId = statusId
         };
     }
 
