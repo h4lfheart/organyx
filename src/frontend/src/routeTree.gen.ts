@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MainRouteImport } from './routes/_main'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
-import { Route as MainBoardRouteImport } from './routes/_main/board'
-import { Route as MainFeaturesRouteImport } from './routes/_main/features'
 import { Route as MainSettingsRouteImport } from './routes/_main/settings'
+import { Route as MainProjectsIndexRouteImport } from './routes/_main/projects/index'
+import { Route as MainProjectsProjectSlugRouteImport } from './routes/_main/projects/$projectSlug'
+import { Route as MainProjectsProjectSlugIndexRouteImport } from './routes/_main/projects/$projectSlug/index'
+import { Route as MainProjectsProjectSlugBoardRouteImport } from './routes/_main/projects/$projectSlug/board'
+import { Route as MainProjectsProjectSlugFeaturesRouteImport } from './routes/_main/projects/$projectSlug/features'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -24,54 +27,96 @@ const MainIndexRoute = MainIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MainRoute,
 } as any)
-const MainBoardRoute = MainBoardRouteImport.update({
-  id: '/board',
-  path: '/board',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainFeaturesRoute = MainFeaturesRouteImport.update({
-  id: '/features',
-  path: '/features',
-  getParentRoute: () => MainRoute,
-} as any)
 const MainSettingsRoute = MainSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => MainRoute,
 } as any)
+const MainProjectsIndexRoute = MainProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainProjectsProjectSlugRoute = MainProjectsProjectSlugRouteImport.update({
+  id: '/projects/$projectSlug',
+  path: '/projects/$projectSlug',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainProjectsProjectSlugIndexRoute =
+  MainProjectsProjectSlugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => MainProjectsProjectSlugRoute,
+  } as any)
+const MainProjectsProjectSlugBoardRoute =
+  MainProjectsProjectSlugBoardRouteImport.update({
+    id: '/board',
+    path: '/board',
+    getParentRoute: () => MainProjectsProjectSlugRoute,
+  } as any)
+const MainProjectsProjectSlugFeaturesRoute =
+  MainProjectsProjectSlugFeaturesRouteImport.update({
+    id: '/features',
+    path: '/features',
+    getParentRoute: () => MainProjectsProjectSlugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
-  '/board': typeof MainBoardRoute
-  '/features': typeof MainFeaturesRoute
   '/settings': typeof MainSettingsRoute
+  '/projects/$projectSlug': typeof MainProjectsProjectSlugRouteWithChildren
+  '/projects/': typeof MainProjectsIndexRoute
+  '/projects/$projectSlug/board': typeof MainProjectsProjectSlugBoardRoute
+  '/projects/$projectSlug/features': typeof MainProjectsProjectSlugFeaturesRoute
+  '/projects/$projectSlug/': typeof MainProjectsProjectSlugIndexRoute
 }
 export interface FileRoutesByTo {
-  '/board': typeof MainBoardRoute
-  '/features': typeof MainFeaturesRoute
   '/settings': typeof MainSettingsRoute
   '/': typeof MainIndexRoute
+  '/projects': typeof MainProjectsIndexRoute
+  '/projects/$projectSlug/board': typeof MainProjectsProjectSlugBoardRoute
+  '/projects/$projectSlug/features': typeof MainProjectsProjectSlugFeaturesRoute
+  '/projects/$projectSlug': typeof MainProjectsProjectSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteWithChildren
-  '/_main/board': typeof MainBoardRoute
-  '/_main/features': typeof MainFeaturesRoute
   '/_main/settings': typeof MainSettingsRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/projects/$projectSlug': typeof MainProjectsProjectSlugRouteWithChildren
+  '/_main/projects/': typeof MainProjectsIndexRoute
+  '/_main/projects/$projectSlug/board': typeof MainProjectsProjectSlugBoardRoute
+  '/_main/projects/$projectSlug/features': typeof MainProjectsProjectSlugFeaturesRoute
+  '/_main/projects/$projectSlug/': typeof MainProjectsProjectSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/board' | '/features' | '/settings'
+  fullPaths:
+    | '/'
+    | '/settings'
+    | '/projects/$projectSlug'
+    | '/projects/'
+    | '/projects/$projectSlug/board'
+    | '/projects/$projectSlug/features'
+    | '/projects/$projectSlug/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/board' | '/features' | '/settings' | '/'
+  to:
+    | '/settings'
+    | '/'
+    | '/projects'
+    | '/projects/$projectSlug/board'
+    | '/projects/$projectSlug/features'
+    | '/projects/$projectSlug'
   id:
     | '__root__'
     | '/_main'
-    | '/_main/board'
-    | '/_main/features'
     | '/_main/settings'
     | '/_main/'
+    | '/_main/projects/$projectSlug'
+    | '/_main/projects/'
+    | '/_main/projects/$projectSlug/board'
+    | '/_main/projects/$projectSlug/features'
+    | '/_main/projects/$projectSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,20 +139,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainIndexRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/board': {
-      id: '/_main/board'
-      path: '/board'
-      fullPath: '/board'
-      preLoaderRoute: typeof MainBoardRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/features': {
-      id: '/_main/features'
-      path: '/features'
-      fullPath: '/features'
-      preLoaderRoute: typeof MainFeaturesRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/_main/settings': {
       id: '/_main/settings'
       path: '/settings'
@@ -115,21 +146,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingsRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/projects/': {
+      id: '/_main/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof MainProjectsIndexRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/projects/$projectSlug': {
+      id: '/_main/projects/$projectSlug'
+      path: '/projects/$projectSlug'
+      fullPath: '/projects/$projectSlug'
+      preLoaderRoute: typeof MainProjectsProjectSlugRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/projects/$projectSlug/': {
+      id: '/_main/projects/$projectSlug/'
+      path: '/'
+      fullPath: '/projects/$projectSlug/'
+      preLoaderRoute: typeof MainProjectsProjectSlugIndexRouteImport
+      parentRoute: typeof MainProjectsProjectSlugRoute
+    }
+    '/_main/projects/$projectSlug/board': {
+      id: '/_main/projects/$projectSlug/board'
+      path: '/board'
+      fullPath: '/projects/$projectSlug/board'
+      preLoaderRoute: typeof MainProjectsProjectSlugBoardRouteImport
+      parentRoute: typeof MainProjectsProjectSlugRoute
+    }
+    '/_main/projects/$projectSlug/features': {
+      id: '/_main/projects/$projectSlug/features'
+      path: '/features'
+      fullPath: '/projects/$projectSlug/features'
+      preLoaderRoute: typeof MainProjectsProjectSlugFeaturesRouteImport
+      parentRoute: typeof MainProjectsProjectSlugRoute
+    }
   }
 }
 
+interface MainProjectsProjectSlugRouteChildren {
+  MainProjectsProjectSlugBoardRoute: typeof MainProjectsProjectSlugBoardRoute
+  MainProjectsProjectSlugFeaturesRoute: typeof MainProjectsProjectSlugFeaturesRoute
+  MainProjectsProjectSlugIndexRoute: typeof MainProjectsProjectSlugIndexRoute
+}
+
+const MainProjectsProjectSlugRouteChildren: MainProjectsProjectSlugRouteChildren =
+  {
+    MainProjectsProjectSlugBoardRoute: MainProjectsProjectSlugBoardRoute,
+    MainProjectsProjectSlugFeaturesRoute: MainProjectsProjectSlugFeaturesRoute,
+    MainProjectsProjectSlugIndexRoute: MainProjectsProjectSlugIndexRoute,
+  }
+
+const MainProjectsProjectSlugRouteWithChildren =
+  MainProjectsProjectSlugRoute._addFileChildren(
+    MainProjectsProjectSlugRouteChildren,
+  )
+
 interface MainRouteChildren {
-  MainBoardRoute: typeof MainBoardRoute
-  MainFeaturesRoute: typeof MainFeaturesRoute
   MainSettingsRoute: typeof MainSettingsRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainProjectsProjectSlugRoute: typeof MainProjectsProjectSlugRouteWithChildren
+  MainProjectsIndexRoute: typeof MainProjectsIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
-  MainBoardRoute: MainBoardRoute,
-  MainFeaturesRoute: MainFeaturesRoute,
   MainSettingsRoute: MainSettingsRoute,
   MainIndexRoute: MainIndexRoute,
+  MainProjectsProjectSlugRoute: MainProjectsProjectSlugRouteWithChildren,
+  MainProjectsIndexRoute: MainProjectsIndexRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)

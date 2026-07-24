@@ -7,6 +7,7 @@ import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+const srcDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src')
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, repoRoot, '')
@@ -19,7 +20,14 @@ export default defineConfig(({ mode }) => {
 
   return {
     envDir: repoRoot,
-    resolve: { tsconfigPaths: true },
+    resolve: {
+      tsconfigPaths: true,
+      alias: {
+        '#lib': path.join(srcDir, 'lib'),
+        '#components': path.join(srcDir, 'components'),
+        '#hooks': path.join(srcDir, 'lib/hooks'),
+      },
+    },
     server: {
       host: '127.0.0.1',
       port,
