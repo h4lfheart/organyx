@@ -20,7 +20,15 @@ export default defineConfig(({ mode }) => {
   return {
     envDir: repoRoot,
     resolve: { tsconfigPaths: true },
-    server: { host: '127.0.0.1', port, strictPort: true },
+    server: {
+      host: '127.0.0.1',
+      port,
+      strictPort: true,
+      watch: {
+        usePolling: true,
+        interval: 100,
+      },
+    },
     preview: { host: '127.0.0.1', port, strictPort: true },
     plugins: [devtools(), tailwindcss(), tanstackStart(), viteReact()],
   }

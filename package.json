@@ -1,0 +1,9 @@
+{
+  "name": "organyx",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix src/frontend",
+    "build": "npm run build --prefix src/frontend",
+    "ui:add": "npm exec --prefix src/frontend -- shadcn@latest add"
+  }
+}

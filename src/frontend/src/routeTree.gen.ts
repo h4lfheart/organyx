@@ -9,50 +9,133 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as MainRouteImport } from './routes/_main'
+import { Route as MainIndexRouteImport } from './routes/_main/index'
+import { Route as MainBoardRouteImport } from './routes/_main/board'
+import { Route as MainFeaturesRouteImport } from './routes/_main/features'
+import { Route as MainSettingsRouteImport } from './routes/_main/settings'
 
-const IndexRoute = IndexRouteImport.update({
+const MainRoute = MainRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MainIndexRoute = MainIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => MainRoute,
+} as any)
+const MainBoardRoute = MainBoardRouteImport.update({
+  id: '/board',
+  path: '/board',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainFeaturesRoute = MainFeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainSettingsRoute = MainSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => MainRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof MainIndexRoute
+  '/board': typeof MainBoardRoute
+  '/features': typeof MainFeaturesRoute
+  '/settings': typeof MainSettingsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/board': typeof MainBoardRoute
+  '/features': typeof MainFeaturesRoute
+  '/settings': typeof MainSettingsRoute
+  '/': typeof MainIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_main': typeof MainRouteWithChildren
+  '/_main/board': typeof MainBoardRoute
+  '/_main/features': typeof MainFeaturesRoute
+  '/_main/settings': typeof MainSettingsRoute
+  '/_main/': typeof MainIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/board' | '/features' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/board' | '/features' | '/settings' | '/'
+  id:
+    | '__root__'
+    | '/_main'
+    | '/_main/board'
+    | '/_main/features'
+    | '/_main/settings'
+    | '/_main/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  MainRoute: typeof MainRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_main': {
+      id: '/_main'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/': {
+      id: '/_main/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MainIndexRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/board': {
+      id: '/_main/board'
+      path: '/board'
+      fullPath: '/board'
+      preLoaderRoute: typeof MainBoardRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/features': {
+      id: '/_main/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof MainFeaturesRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/settings': {
+      id: '/_main/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof MainSettingsRouteImport
+      parentRoute: typeof MainRoute
     }
   }
 }
 
+interface MainRouteChildren {
+  MainBoardRoute: typeof MainBoardRoute
+  MainFeaturesRoute: typeof MainFeaturesRoute
+  MainSettingsRoute: typeof MainSettingsRoute
+  MainIndexRoute: typeof MainIndexRoute
+}
+
+const MainRouteChildren: MainRouteChildren = {
+  MainBoardRoute: MainBoardRoute,
+  MainFeaturesRoute: MainFeaturesRoute,
+  MainSettingsRoute: MainSettingsRoute,
+  MainIndexRoute: MainIndexRoute,
+}
+
+const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  MainRoute: MainRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
