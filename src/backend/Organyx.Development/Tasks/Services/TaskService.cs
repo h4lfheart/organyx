@@ -76,7 +76,7 @@ public class TaskService(
             statusId = defaultStatus.Id;
         }
 
-        await ValidateReferencesAsync(projectId, request.FeatureId, statusId);
+        await ValidateReferencesAsync(projectId, request.FeatureId, statusId.Value);
 
         var created = await taskRepository.InsertAsync(request.ToTable(projectId, statusId.Value))
                       ?? throw new InvalidOperationException("Failed to create task.");
@@ -107,7 +107,7 @@ public class TaskService(
         await taskRepository.DeleteAsync(taskId);
     }
 
-    private async Task ValidateReferencesAsync(Guid projectId, Guid? featureId, Guid? statusId)
+    private async Task ValidateReferencesAsync(Guid projectId, Guid? featureId, Guid statusId)
     {
         if (featureId is not null)
         {
@@ -116,11 +116,8 @@ public class TaskService(
                 throw new BusinessRuleException("Feature does not belong to this project.");
         }
 
-        if (statusId is not null)
-        {
-            var status = await statusRepository.GetByIdAsync(statusId.Value);
-            if (status is null || status.ProjectId != projectId)
-                throw new BusinessRuleException("Status does not belong to this project.");
-        }
+        var status = await statusRepository.GetByIdAsync(statusId);
+        if (status is null || status.ProjectId != projectId)
+            throw new BusinessRuleException("Status does not belong to this project.");
     }
 }

@@ -8,5 +8,6 @@ public sealed class UpdateTaskRequestValidator : AbstractValidator<UpdateTaskReq
     public UpdateTaskRequestValidator()
     {
         RuleFor(x => x.Title).NotEmpty();
+        RuleFor(x => x.StatusId).NotEmpty();
     }
 }

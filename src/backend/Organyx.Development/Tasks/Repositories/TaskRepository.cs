@@ -23,7 +23,7 @@ public interface ITaskRepository
         string? description,
         string priority,
         Guid? featureId,
-        Guid? statusId);
+        Guid statusId);
 
     Task DeleteAsync(Guid taskId);
 }
@@ -93,7 +93,7 @@ public class TaskRepository(SupabaseService supabaseService) : ITaskRepository
         string? description,
         string priority,
         Guid? featureId,
-        Guid? statusId)
+        Guid statusId)
     {
         var result = await supabaseService.Client.From<ProjectTask>()
             .Where(x => x.Id == taskId)
@@ -101,7 +101,7 @@ public class TaskRepository(SupabaseService supabaseService) : ITaskRepository
             .Set(x => x.Description!, description)
             .Set(x => x.Priority, priority)
             .Set(x => x.FeatureId!, featureId)
-            .Set(x => x.StatusId!, statusId)
+            .Set(x => x.StatusId, statusId)
             .Update();
         return result.Models.FirstOrDefault();
     }

@@ -11,7 +11,7 @@ public class ProjectTask : BaseModel
 
     [Column("project_id")] public Guid ProjectId { get; set; }
     [Column("feature_id")] public Guid? FeatureId { get; set; }
-    [Column("status_id")] public Guid? StatusId { get; set; }
+    [Column("status_id")] public Guid StatusId { get; set; }
 
     [Column("number", ignoreOnInsert: true)]
     public int Number { get; set; }

@@ -4,9 +4,11 @@ create table projects
 (
 	id uuid primary key default gen_random_uuid(),
 	key text not null unique,
+	slug text not null unique,
 	name text not null,
 	description text,
-	task_seq integer not null default 0
+	task_seq integer not null default 0,
+	constraint projects_slug_format check (slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
 
 create table status
@@ -14,8 +16,13 @@ create table status
 	id uuid primary key default gen_random_uuid(),
 	project_id uuid not null references projects (id) on delete cascade,
 	name text not null,
-	position integer not null default 0
+	position integer not null default 0,
+	is_default boolean not null default false
 );
+
+create unique index status_one_default_per_project
+	on status (project_id)
+	where is_default;
 
 create table features
 (
@@ -30,7 +37,7 @@ create table tasks
 	id uuid primary key default gen_random_uuid(),
 	project_id uuid not null references projects (id) on delete cascade,
 	feature_id uuid references features (id) on delete set null,
-	status_id uuid references status (id) on delete set null,
+	status_id uuid not null references status (id) on delete restrict,
 	number integer not null,
 	title text not null,
 	description text,
@@ -61,10 +68,10 @@ returns trigger
 language plpgsql
 as $$
 	begin
-		insert into status (project_id, name, position)
-		values (new.id, 'Todo', 0),
-			(new.id, 'In Progress', 1),
-			(new.id, 'Complete', 2);
+		insert into status (project_id, name, position, is_default)
+		values (new.id, 'Todo', 0, true),
+			(new.id, 'In Progress', 1, false),
+			(new.id, 'Complete', 2, false);
 		return new;
 	end;
 $$;

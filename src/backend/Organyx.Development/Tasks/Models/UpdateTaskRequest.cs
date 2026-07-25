@@ -8,5 +8,5 @@ public record UpdateTaskRequest
     public string? Description { get; init; }
     public required Priority Priority { get; init; }
     public Guid? FeatureId { get; init; }
-    public Guid? StatusId { get; init; }
+    public required Guid StatusId { get; init; }
 }
