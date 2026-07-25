@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 import { Text } from "#components/ui/text";
 import { useProjects } from "#lib/hooks/projects/use-projects";
+import { cn, interactiveRegionClassName } from "#lib/utils";
 
 export function ProjectsPage() {
 	const { data, isPending, isError } = useProjects();
@@ -32,7 +33,10 @@ export function ProjectsPage() {
 							<Link
 								to="/projects/$projectSlug"
 								params={{ projectSlug: project.slug }}
-								className="text-sm text-foreground underline-offset-4 hover:underline"
+								className={cn(
+									"inline-flex h-7 items-center text-sm text-foreground",
+									interactiveRegionClassName,
+								)}
 							>
 								{project.name}
 							</Link>

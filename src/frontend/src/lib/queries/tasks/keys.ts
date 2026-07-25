@@ -1,0 +1,5 @@
+export const taskKeys = {
+	all: ["tasks"] as const,
+	lists: () => [...taskKeys.all, "list"] as const,
+	list: (projectSlug: string) => [...taskKeys.lists(), projectSlug] as const,
+};

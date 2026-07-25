@@ -19,6 +19,8 @@ import { Route as MainProjectsProjectSlugIndexRouteImport } from './routes/_main
 import { Route as MainProjectsProjectSlugBoardRouteImport } from './routes/_main/projects/$projectSlug/board'
 import { Route as MainProjectsProjectSlugFeaturesRouteImport } from './routes/_main/projects/$projectSlug/features'
 import { Route as MainProjectsProjectSlugTasksRouteImport } from './routes/_main/projects/$projectSlug/tasks'
+import { Route as MainProjectsProjectSlugTasksIndexRouteImport } from './routes/_main/projects/$projectSlug/tasks/index'
+import { Route as MainProjectsProjectSlugTasksTaskKeyRouteImport } from './routes/_main/projects/$projectSlug/tasks/$taskKey'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -73,6 +75,18 @@ const MainProjectsProjectSlugTasksRoute =
     path: '/tasks',
     getParentRoute: () => MainProjectsProjectSlugRoute,
   } as any)
+const MainProjectsProjectSlugTasksIndexRoute =
+  MainProjectsProjectSlugTasksIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => MainProjectsProjectSlugTasksRoute,
+  } as any)
+const MainProjectsProjectSlugTasksTaskKeyRoute =
+  MainProjectsProjectSlugTasksTaskKeyRouteImport.update({
+    id: '/$taskKey',
+    path: '/$taskKey',
+    getParentRoute: () => MainProjectsProjectSlugTasksRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
@@ -82,8 +96,10 @@ export interface FileRoutesByFullPath {
   '/projects/': typeof MainProjectsIndexRoute
   '/projects/$projectSlug/board': typeof MainProjectsProjectSlugBoardRoute
   '/projects/$projectSlug/features': typeof MainProjectsProjectSlugFeaturesRoute
-  '/projects/$projectSlug/tasks': typeof MainProjectsProjectSlugTasksRoute
+  '/projects/$projectSlug/tasks': typeof MainProjectsProjectSlugTasksRouteWithChildren
   '/projects/$projectSlug/': typeof MainProjectsProjectSlugIndexRoute
+  '/projects/$projectSlug/tasks/$taskKey': typeof MainProjectsProjectSlugTasksTaskKeyRoute
+  '/projects/$projectSlug/tasks/': typeof MainProjectsProjectSlugTasksIndexRoute
 }
 export interface FileRoutesByTo {
   '/settings': typeof MainSettingsRoute
@@ -91,8 +107,9 @@ export interface FileRoutesByTo {
   '/projects': typeof MainProjectsIndexRoute
   '/projects/$projectSlug/board': typeof MainProjectsProjectSlugBoardRoute
   '/projects/$projectSlug/features': typeof MainProjectsProjectSlugFeaturesRoute
-  '/projects/$projectSlug/tasks': typeof MainProjectsProjectSlugTasksRoute
   '/projects/$projectSlug': typeof MainProjectsProjectSlugIndexRoute
+  '/projects/$projectSlug/tasks/$taskKey': typeof MainProjectsProjectSlugTasksTaskKeyRoute
+  '/projects/$projectSlug/tasks': typeof MainProjectsProjectSlugTasksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,8 +121,10 @@ export interface FileRoutesById {
   '/_main/projects/': typeof MainProjectsIndexRoute
   '/_main/projects/$projectSlug/board': typeof MainProjectsProjectSlugBoardRoute
   '/_main/projects/$projectSlug/features': typeof MainProjectsProjectSlugFeaturesRoute
-  '/_main/projects/$projectSlug/tasks': typeof MainProjectsProjectSlugTasksRoute
+  '/_main/projects/$projectSlug/tasks': typeof MainProjectsProjectSlugTasksRouteWithChildren
   '/_main/projects/$projectSlug/': typeof MainProjectsProjectSlugIndexRoute
+  '/_main/projects/$projectSlug/tasks/$taskKey': typeof MainProjectsProjectSlugTasksTaskKeyRoute
+  '/_main/projects/$projectSlug/tasks/': typeof MainProjectsProjectSlugTasksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,6 +138,8 @@ export interface FileRouteTypes {
     | '/projects/$projectSlug/features'
     | '/projects/$projectSlug/tasks'
     | '/projects/$projectSlug/'
+    | '/projects/$projectSlug/tasks/$taskKey'
+    | '/projects/$projectSlug/tasks/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/settings'
@@ -126,8 +147,9 @@ export interface FileRouteTypes {
     | '/projects'
     | '/projects/$projectSlug/board'
     | '/projects/$projectSlug/features'
-    | '/projects/$projectSlug/tasks'
     | '/projects/$projectSlug'
+    | '/projects/$projectSlug/tasks/$taskKey'
+    | '/projects/$projectSlug/tasks'
   id:
     | '__root__'
     | '/_main'
@@ -140,6 +162,8 @@ export interface FileRouteTypes {
     | '/_main/projects/$projectSlug/features'
     | '/_main/projects/$projectSlug/tasks'
     | '/_main/projects/$projectSlug/'
+    | '/_main/projects/$projectSlug/tasks/$taskKey'
+    | '/_main/projects/$projectSlug/tasks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -218,13 +242,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainProjectsProjectSlugTasksRouteImport
       parentRoute: typeof MainProjectsProjectSlugRoute
     }
+    '/_main/projects/$projectSlug/tasks/': {
+      id: '/_main/projects/$projectSlug/tasks/'
+      path: '/'
+      fullPath: '/projects/$projectSlug/tasks/'
+      preLoaderRoute: typeof MainProjectsProjectSlugTasksIndexRouteImport
+      parentRoute: typeof MainProjectsProjectSlugTasksRoute
+    }
+    '/_main/projects/$projectSlug/tasks/$taskKey': {
+      id: '/_main/projects/$projectSlug/tasks/$taskKey'
+      path: '/$taskKey'
+      fullPath: '/projects/$projectSlug/tasks/$taskKey'
+      preLoaderRoute: typeof MainProjectsProjectSlugTasksTaskKeyRouteImport
+      parentRoute: typeof MainProjectsProjectSlugTasksRoute
+    }
   }
 }
+
+interface MainProjectsProjectSlugTasksRouteChildren {
+  MainProjectsProjectSlugTasksTaskKeyRoute: typeof MainProjectsProjectSlugTasksTaskKeyRoute
+  MainProjectsProjectSlugTasksIndexRoute: typeof MainProjectsProjectSlugTasksIndexRoute
+}
+
+const MainProjectsProjectSlugTasksRouteChildren: MainProjectsProjectSlugTasksRouteChildren =
+  {
+    MainProjectsProjectSlugTasksTaskKeyRoute:
+      MainProjectsProjectSlugTasksTaskKeyRoute,
+    MainProjectsProjectSlugTasksIndexRoute:
+      MainProjectsProjectSlugTasksIndexRoute,
+  }
+
+const MainProjectsProjectSlugTasksRouteWithChildren =
+  MainProjectsProjectSlugTasksRoute._addFileChildren(
+    MainProjectsProjectSlugTasksRouteChildren,
+  )
 
 interface MainProjectsProjectSlugRouteChildren {
   MainProjectsProjectSlugBoardRoute: typeof MainProjectsProjectSlugBoardRoute
   MainProjectsProjectSlugFeaturesRoute: typeof MainProjectsProjectSlugFeaturesRoute
-  MainProjectsProjectSlugTasksRoute: typeof MainProjectsProjectSlugTasksRoute
+  MainProjectsProjectSlugTasksRoute: typeof MainProjectsProjectSlugTasksRouteWithChildren
   MainProjectsProjectSlugIndexRoute: typeof MainProjectsProjectSlugIndexRoute
 }
 
@@ -232,7 +288,8 @@ const MainProjectsProjectSlugRouteChildren: MainProjectsProjectSlugRouteChildren
   {
     MainProjectsProjectSlugBoardRoute: MainProjectsProjectSlugBoardRoute,
     MainProjectsProjectSlugFeaturesRoute: MainProjectsProjectSlugFeaturesRoute,
-    MainProjectsProjectSlugTasksRoute: MainProjectsProjectSlugTasksRoute,
+    MainProjectsProjectSlugTasksRoute:
+      MainProjectsProjectSlugTasksRouteWithChildren,
     MainProjectsProjectSlugIndexRoute: MainProjectsProjectSlugIndexRoute,
   }
 

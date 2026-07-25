@@ -23,7 +23,6 @@ import {
 } from "#components/ui/sidebar";
 import type { Project } from "#lib/types";
 
-/** Exact path match; drive SidebarMenuButton's data-active via Link. */
 const navActiveOptions = { exact: true, includeSearch: false } as const;
 const navActiveProps = { "data-active": "" } as const;
 
@@ -93,7 +92,7 @@ export function ProjectNavSection({ project }: ProjectNavSectionProps) {
 										<Link
 											to="/projects/$projectSlug/tasks"
 											params={{ projectSlug: project.slug }}
-											activeOptions={navActiveOptions}
+											activeOptions={{ exact: false, includeSearch: false }}
 											activeProps={navActiveProps}
 										/>
 									}

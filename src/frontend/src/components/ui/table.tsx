@@ -1,19 +1,25 @@
 import type * as React from "react";
 
+import { Card } from "#components/ui/card";
 import { cn } from "#lib/utils";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
 	return (
-		<div
-			data-slot="table-container"
-			className="relative w-full overflow-x-auto"
-		>
-			<table
-				data-slot="table"
-				className={cn("w-full caption-bottom text-sm", className)}
-				{...props}
-			/>
-		</div>
+		<Card data-slot="table-card" className="gap-0 py-0">
+			<div
+				data-slot="table-container"
+				className="relative w-full overflow-x-auto"
+			>
+				<table
+					data-slot="table"
+					className={cn(
+						"w-full caption-bottom text-sm [&_th:first-child]:pl-4 [&_td:first-child]:pl-4 [&_th:last-child]:pr-4 [&_td:last-child]:pr-4",
+						className,
+					)}
+					{...props}
+				/>
+			</div>
+		</Card>
 	);
 }
 

@@ -28,7 +28,6 @@ const workspaceItems = [
 	{ title: "Projects", icon: FolderKanban, to: "/projects" },
 ] as const;
 
-/** Exact path match; drive SidebarMenuButton's data-active via Link. */
 const navActiveOptions = { exact: true, includeSearch: false } as const;
 const navActiveProps = { "data-active": "" } as const;
 

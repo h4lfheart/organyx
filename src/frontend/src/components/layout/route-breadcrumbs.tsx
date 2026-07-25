@@ -1,5 +1,5 @@
 import { Link, useMatches } from "@tanstack/react-router";
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 
 import {
 	Breadcrumb,
@@ -13,7 +13,7 @@ import type { BreadcrumbCrumb } from "#lib/types/breadcrumb";
 
 type ResolvedCrumb = {
 	id: string;
-	label: string;
+	label: ReactNode;
 	fullPath: string;
 	params: Record<string, string>;
 };
