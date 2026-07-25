@@ -1,4 +1,4 @@
-using Organyx.Development.Tasks.Tables;
+using Organyx.Infrastructure.Tables;
 using Organyx.Infrastructure.Services;
 using Supabase.Postgrest;
 using Supabase.Postgrest.Exceptions;

@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Organyx.Development.Features.Repositories;
 using Organyx.Development.Features.Services;
@@ -14,6 +15,8 @@ namespace Organyx.Development;
 
 public static class DevelopmentIocConfiguration
 {
+    public const string RoutePrefix = "dev";
+
     extension(IServiceCollection services)
     {
         public IServiceCollection AddDevelopmentIoc()
@@ -33,6 +36,20 @@ public static class DevelopmentIocConfiguration
             services.AddScoped<ITaskService, TaskService>();
 
             return services;
+        }
+    }
+
+    extension(IMvcBuilder mvc)
+    {
+        public IMvcBuilder AddDevelopmentControllers()
+        {
+            var assembly = typeof(DevelopmentIocConfiguration).Assembly;
+            mvc.AddApplicationPart(assembly);
+            mvc.AddMvcOptions(options =>
+            {
+                options.Conventions.Add(new AssemblyRoutePrefixConvention(assembly, RoutePrefix));
+            });
+            return mvc;
         }
     }
 }

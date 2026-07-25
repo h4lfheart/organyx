@@ -31,7 +31,7 @@ public class StatusesController(IStatusService statusService) : ControllerBase
         [FromBody] CreateStatusRequest request)
     {
         var id = await statusService.CreateAsync(projectId, request);
-        return Created($"/status/{id}", id);
+        return CreatedAtAction(nameof(GetStatusAsync), new { statusId = id }, id);
     }
 
     [HttpPut("status/{statusId:guid}")]

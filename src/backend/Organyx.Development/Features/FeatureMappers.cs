@@ -1,5 +1,5 @@
 using Organyx.Development.Features.Models;
-using Organyx.Development.Features.Tables;
+using Organyx.Infrastructure.Tables;
 
 namespace Organyx.Development.Features;
 

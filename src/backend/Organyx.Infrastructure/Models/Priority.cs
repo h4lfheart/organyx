@@ -1,4 +1,4 @@
-namespace Organyx.Development.Tasks.Models;
+namespace Organyx.Infrastructure.Models;
 
 public enum Priority
 {

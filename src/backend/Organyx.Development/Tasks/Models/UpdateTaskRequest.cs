@@ -1,3 +1,5 @@
+using Organyx.Infrastructure.Models;
+
 namespace Organyx.Development.Tasks.Models;
 
 public record UpdateTaskRequest

@@ -31,7 +31,7 @@ public class FeaturesController(IFeatureService featureService) : ControllerBase
         [FromBody] CreateFeatureRequest request)
     {
         var id = await featureService.CreateAsync(projectId, request);
-        return Created($"/features/{id}", id);
+        return CreatedAtAction(nameof(GetFeatureAsync), new { featureId = id }, id);
     }
 
     [HttpPut("features/{featureId:guid}")]

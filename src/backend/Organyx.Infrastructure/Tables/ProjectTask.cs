@@ -1,7 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Organyx.Development.Tasks.Tables;
+namespace Organyx.Infrastructure.Tables;
 
 [Table("tasks")]
 public class ProjectTask : BaseModel

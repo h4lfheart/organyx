@@ -1,5 +1,5 @@
 using Organyx.Development.Statuses.Models;
-using Organyx.Development.Statuses.Tables;
+using Organyx.Infrastructure.Tables;
 
 namespace Organyx.Development.Statuses;
 

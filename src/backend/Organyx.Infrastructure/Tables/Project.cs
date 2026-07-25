@@ -1,7 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Organyx.Development.Projects.Tables;
+namespace Organyx.Infrastructure.Tables;
 
 [Table("projects")]
 public class Project : BaseModel

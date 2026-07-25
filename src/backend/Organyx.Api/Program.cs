@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
 using Organyx.Api;
+using Organyx.Application;
 using Organyx.Development;
 using Organyx.Infrastructure;
 using Organyx.Infrastructure.Errors;
@@ -41,7 +42,8 @@ builder.Services.AddOrganyxOpenApi();
 builder.Services
     .AddControllers(o =>  o.Filters.Add<FluentValidationActionFilter>())
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
-    .AddApplicationPart(typeof(DevelopmentIocConfiguration).Assembly);
+    .AddApplicationPart(typeof(ApplicationIocConfiguration).Assembly)
+    .AddDevelopmentControllers();
 
 builder.Services.AddCors(options =>
 {
@@ -53,6 +55,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod());
 });
 
+builder.Services.AddApplicationIoc();
 builder.Services.AddDevelopmentIoc();
 builder.Services.AddInfrastructureIoc();
 

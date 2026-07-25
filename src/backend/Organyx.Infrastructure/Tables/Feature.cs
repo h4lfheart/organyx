@@ -1,7 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Organyx.Development.Features.Tables;
+namespace Organyx.Infrastructure.Tables;
 
 [Table("features")]
 public class Feature : BaseModel

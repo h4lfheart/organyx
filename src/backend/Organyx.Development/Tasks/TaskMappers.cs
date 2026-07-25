@@ -1,5 +1,6 @@
 using Organyx.Development.Tasks.Models;
-using Organyx.Development.Tasks.Tables;
+using Organyx.Infrastructure.Models;
+using Organyx.Infrastructure.Tables;
 
 namespace Organyx.Development.Tasks;
 

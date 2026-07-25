@@ -30,7 +30,7 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     public async Task<ActionResult<Guid>> CreateProjectAsync([FromBody] CreateProjectRequest request)
     {
         var id = await projectService.CreateAsync(request);
-        return Created($"/projects/{id}", id);
+        return CreatedAtAction(nameof(GetProjectAsync), new { projectId = id }, id);
     }
 
     [HttpPut("{projectId:guid}")]

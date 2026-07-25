@@ -3,7 +3,6 @@ export type Project = {
 	key: string;
 	slug: string;
 	name: string;
-	description: string | null;
 };
 
 export type ProjectsResponse = {

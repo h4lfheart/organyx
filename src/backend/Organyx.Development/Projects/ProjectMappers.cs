@@ -1,5 +1,5 @@
 using Organyx.Development.Projects.Models;
-using Organyx.Development.Projects.Tables;
+using Organyx.Infrastructure.Tables;
 
 namespace Organyx.Development.Projects;
 

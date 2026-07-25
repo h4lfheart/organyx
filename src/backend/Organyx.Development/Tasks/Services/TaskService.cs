@@ -2,6 +2,7 @@ using Organyx.Development.Features.Repositories;
 using Organyx.Development.Projects.Repositories;
 using Organyx.Development.Statuses.Repositories;
 using Organyx.Development.Tasks.Models;
+using Organyx.Infrastructure.Models;
 using Organyx.Development.Tasks.Repositories;
 using Organyx.Infrastructure.Errors;
 

@@ -1,7 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Organyx.Development.Statuses.Tables;
+namespace Organyx.Infrastructure.Tables;
 
 [Table("status")]
 public class Status : BaseModel

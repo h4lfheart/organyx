@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organyx.Development.Tasks.Models;
 using Organyx.Development.Tasks.Services;
+using Organyx.Infrastructure.Models;
 
 namespace Organyx.Development.Tasks;
 
@@ -36,7 +37,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
         [FromBody] CreateTaskRequest request)
     {
         var id = await taskService.CreateAsync(projectId, request);
-        return Created($"/tasks/{id}", id);
+        return CreatedAtAction(nameof(GetTaskAsync), new { taskId = id }, id);
     }
 
     [HttpPut("tasks/{taskId:guid}")]
