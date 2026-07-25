@@ -1,17 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Text } from "#components/ui/text";
+import { BoardPage } from "#components/projects/board/board-page";
 
 export const Route = createFileRoute("/_main/projects/$projectSlug/board")({
+	staticData: {
+		breadcrumb: "Board",
+	},
 	component: BoardPage,
 });
-
-function BoardPage() {
-	return (
-		<main className="flex flex-1 flex-col gap-4 p-6">
-			<Text as="h1" variant="title">
-				Board
-			</Text>
-		</main>
-	);
-}

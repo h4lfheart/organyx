@@ -3,6 +3,7 @@ import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query
 
 import { NotFoundPage } from "#components/not-found";
 import { createQueryClient } from "#lib/config/query-client";
+import "#lib/types/breadcrumb";
 
 import { routeTree } from "./routeTree.gen";
 

@@ -1,17 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Text } from "#components/ui/text";
+import { FeaturesPage } from "#components/projects/features/features-page";
 
 export const Route = createFileRoute("/_main/projects/$projectSlug/features")({
+	staticData: {
+		breadcrumb: "Features",
+	},
 	component: FeaturesPage,
 });
-
-function FeaturesPage() {
-	return (
-		<main className="flex flex-1 flex-col gap-4 p-6">
-			<Text as="h1" variant="title">
-				Features
-			</Text>
-		</main>
-	);
-}

@@ -1,17 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Text } from "#components/ui/text"
+import { HomePage } from "#components/home/home-page";
 
 export const Route = createFileRoute("/_main/")({
+	staticData: {
+		breadcrumb: "Home",
+	},
 	component: HomePage,
-})
-
-function HomePage() {
-	return (
-		<main className="flex flex-1 flex-col gap-4 p-6">
-			<Text as="h1" variant="title">
-				Home
-			</Text>
-		</main>
-	)
-}
+});
