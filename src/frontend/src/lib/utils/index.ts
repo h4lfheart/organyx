@@ -10,6 +10,7 @@ export const interactiveRegionClassName =
 	"-mx-1.5 rounded-md px-1.5 transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
 
 export { compareTimestamps, formatTimestamp } from "#lib/utils/date";
+export { matchesTextSearch } from "#lib/utils/search";
 export {
 	comparePriorities,
 	priorityOrder,
