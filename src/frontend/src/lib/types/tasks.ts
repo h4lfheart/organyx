@@ -12,6 +12,8 @@ export type Task = {
 	description: string | null;
 	status: TaskStatusBadge;
 	priority: Priority;
+	createdAt: string | null;
+	updatedAt: string | null;
 };
 
 export type TasksResponse = {

@@ -15,6 +15,8 @@ public record TaskResponseEntry
     public string? Description { get; init; }
     public required TaskStatusBadge Status { get; init; }
     public required Priority Priority { get; init; }
+    public required DateTimeOffset CreatedAt { get; init; }
+    public required DateTimeOffset UpdatedAt { get; init; }
 }
 
 public record TaskStatusBadge

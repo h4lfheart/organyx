@@ -7,11 +7,13 @@ public static class FeatureMappers
 {
     extension(CreateFeatureRequest request)
     {
-        public Feature ToTable(Guid projectId) => new()
+        public Feature ToTable(Guid projectId, string slug) => new()
         {
             ProjectId = projectId,
+            Slug = slug,
             Name = request.Name,
-            Description = request.Description
+            Description = request.Description,
+            StatusId = request.StatusId
         };
     }
 
@@ -21,8 +23,12 @@ public static class FeatureMappers
         {
             Id = feature.Id,
             ProjectId = feature.ProjectId,
+            Slug = feature.Slug,
             Name = feature.Name,
-            Description = feature.Description
+            Description = feature.Description,
+            StatusId = feature.StatusId,
+            CreatedAt = feature.CreatedAt,
+            UpdatedAt = feature.UpdatedAt
         };
     }
 }

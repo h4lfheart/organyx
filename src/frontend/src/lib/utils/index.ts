@@ -8,3 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 /** Soft rounded hover for inline clickable text (links, entity refs). */
 export const interactiveRegionClassName =
 	"-mx-1.5 rounded-md px-1.5 transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+
+export { compareTimestamps, formatTimestamp } from "#lib/utils/date";
+export {
+	comparePriorities,
+	priorityOrder,
+	taskNumber,
+} from "#lib/utils/tasks";

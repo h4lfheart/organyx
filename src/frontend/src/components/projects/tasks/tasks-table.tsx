@@ -22,19 +22,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "#components/ui/table";
-import type { Priority, Task } from "#lib/types";
-
-const priorityOrder: Record<Priority, number> = {
-	Low: 0,
-	Medium: 1,
-	High: 2,
-	Urgent: 3,
-};
-
-function taskNumber(key: string) {
-	const value = Number(key.split("-").pop());
-	return Number.isFinite(value) ? value : 0;
-}
+import type { Task } from "#lib/types";
+import {
+	comparePriorities,
+	compareTimestamps,
+	formatTimestamp,
+	taskNumber,
+} from "#lib/utils";
 
 function SortableHeader({
 	column,
@@ -121,8 +115,31 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 			),
 			cell: ({ row }) => <PriorityBadge priority={row.original.priority} />,
 			sortingFn: (rowA, rowB) =>
-				priorityOrder[rowA.original.priority] -
-				priorityOrder[rowB.original.priority],
+				comparePriorities(rowA.original.priority, rowB.original.priority),
+		},
+		{
+			accessorKey: "createdAt",
+			header: ({ column }) => (
+				<SortableHeader column={column} title="Created" />
+			),
+			cell: ({ row }) => {
+				const createdAt = displayValue(row.original.createdAt);
+				return createdAt ? formatTimestamp(createdAt) : <EmptyValue />;
+			},
+			sortingFn: (rowA, rowB) =>
+				compareTimestamps(rowA.original.createdAt, rowB.original.createdAt),
+		},
+		{
+			accessorKey: "updatedAt",
+			header: ({ column }) => (
+				<SortableHeader column={column} title="Updated" />
+			),
+			cell: ({ row }) => {
+				const updatedAt = displayValue(row.original.updatedAt);
+				return updatedAt ? formatTimestamp(updatedAt) : <EmptyValue />;
+			},
+			sortingFn: (rowA, rowB) =>
+				compareTimestamps(rowA.original.updatedAt, rowB.original.updatedAt),
 		},
 	];
 
@@ -162,7 +179,10 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 									? "max-w-64 truncate font-medium"
 									: cell.column.id === "description"
 										? "max-w-xs truncate text-muted-foreground"
-										: undefined;
+										: cell.column.id === "createdAt" ||
+												cell.column.id === "updatedAt"
+											? "whitespace-nowrap text-muted-foreground tabular-nums"
+											: undefined;
 
 							return (
 								<TableCell key={cell.id} className={className}>

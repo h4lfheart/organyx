@@ -8,6 +8,8 @@ create table projects
 	name text not null,
 	description text,
 	task_seq integer not null default 0,
+	created_at timestamptz not null default now(),
+	updated_at timestamptz not null default now(),
 	constraint projects_slug_format check (slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
 
@@ -28,8 +30,14 @@ create table features
 (
 	id uuid primary key default gen_random_uuid(),
 	project_id uuid not null references projects (id) on delete cascade,
+	status_id uuid references status (id) on delete set null,
+	slug text not null,
 	name text not null,
-	description text
+	description text,
+	created_at timestamptz not null default now(),
+	updated_at timestamptz not null default now(),
+	unique (project_id, slug),
+	constraint features_slug_format check (slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
 
 create table tasks
@@ -42,8 +50,35 @@ create table tasks
 	title text not null,
 	description text,
 	priority priority not null default 'medium',
+	created_at timestamptz not null default now(),
+	updated_at timestamptz not null default now(),
 	unique (project_id, number)
 );
+
+create or replace function set_updated_at()
+returns trigger
+language plpgsql
+as $$
+	begin
+		new.updated_at = now();
+		return new;
+	end;
+$$;
+
+create trigger projects_set_updated_at
+	before update
+	on projects
+	for each row execute function set_updated_at();
+
+create trigger features_set_updated_at
+	before update
+	on features
+	for each row execute function set_updated_at();
+
+create trigger tasks_set_updated_at
+	before update
+	on tasks
+	for each row execute function set_updated_at();
 
 create or replace function set_task_number()
 returns trigger
@@ -85,6 +120,7 @@ create index on tasks (project_id);
 create index on tasks (feature_id);
 create index on tasks (status_id);
 create index on features (project_id);
+create index on features (status_id);
 create index on status (project_id);
 
 grant usage on type priority to service_role;

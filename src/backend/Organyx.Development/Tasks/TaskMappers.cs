@@ -31,7 +31,9 @@ public static class TaskMappers
             Description = task.Description,
             Priority = PriorityMapping.FromDatabase(task.Priority),
             FeatureId = task.FeatureId,
-            StatusId = task.StatusId
+            StatusId = task.StatusId,
+            CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt
         };
     }
 }

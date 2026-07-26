@@ -18,4 +18,6 @@ public record TaskResponseEntry
     public required Priority Priority { get; init; }
     public Guid? FeatureId { get; init; }
     public required Guid StatusId { get; init; }
+    public required DateTimeOffset CreatedAt { get; init; }
+    public required DateTimeOffset UpdatedAt { get; init; }
 }

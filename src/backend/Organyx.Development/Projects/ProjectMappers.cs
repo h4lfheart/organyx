@@ -24,7 +24,9 @@ public static class ProjectMappers
             Key = project.Key,
             Slug = project.Slug,
             Name = project.Name,
-            Description = project.Description
+            Description = project.Description,
+            CreatedAt = project.CreatedAt,
+            UpdatedAt = project.UpdatedAt
         };
     }
 }

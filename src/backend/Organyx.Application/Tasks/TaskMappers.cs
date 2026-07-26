@@ -15,7 +15,9 @@ public static class TaskMappers
             Title = task.Title,
             Description = task.Description,
             Status = status.ToBadge(),
-            Priority = PriorityMapping.FromDatabase(task.Priority)
+            Priority = PriorityMapping.FromDatabase(task.Priority),
+            CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt
         };
     }
 

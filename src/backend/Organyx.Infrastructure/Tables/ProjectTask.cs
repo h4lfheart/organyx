@@ -19,4 +19,10 @@ public class ProjectTask : BaseModel
     [Column("title")] public string Title { get; set; } = string.Empty;
     [Column("description")] public string? Description { get; set; }
     [Column("priority")] public string Priority { get; set; } = "medium";
+
+    [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
+    public DateTimeOffset CreatedAt { get; set; }
+
+    [Column("updated_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
+    public DateTimeOffset UpdatedAt { get; set; }
 }

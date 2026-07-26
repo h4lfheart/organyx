@@ -16,4 +16,10 @@ public class Project : BaseModel
 
     [Column("task_seq", ignoreOnInsert: true, ignoreOnUpdate: true)]
     public int TaskSeq { get; set; }
+
+    [Column("created_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
+    public DateTimeOffset CreatedAt { get; set; }
+
+    [Column("updated_at", ignoreOnInsert: true, ignoreOnUpdate: true)]
+    public DateTimeOffset UpdatedAt { get; set; }
 }
