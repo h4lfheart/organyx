@@ -107,7 +107,7 @@ export function ProjectNavSection({ project }: ProjectNavSectionProps) {
 										<Link
 											to="/projects/$projectSlug/features"
 											params={{ projectSlug: project.slug }}
-											activeOptions={navActiveOptions}
+											activeOptions={{ exact: false, includeSearch: false }}
 											activeProps={navActiveProps}
 										/>
 									}

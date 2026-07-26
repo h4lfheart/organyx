@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { useState } from "react";
-import { PriorityBadge } from "#components/projects/tasks/priority-badge";
 import { EntityRef } from "#components/shared/entity-ref";
 import { Badge } from "#components/ui/badge";
 import { Button } from "#components/ui/button";
@@ -22,19 +21,14 @@ import {
 	TableHeader,
 	TableRow,
 } from "#components/ui/table";
-import type { Task } from "#lib/types";
-import {
-	comparePriorities,
-	compareTimestamps,
-	formatTimestamp,
-	taskNumber,
-} from "#lib/utils";
+import type { Feature } from "#lib/types";
+import { compareTimestamps, formatTimestamp } from "#lib/utils";
 
 function SortableHeader({
 	column,
 	title,
 }: {
-	column: Column<Task, unknown>;
+	column: Column<Feature, unknown>;
 	title: string;
 }) {
 	const sorted = column.getIsSorted();
@@ -58,32 +52,30 @@ function SortableHeader({
 	);
 }
 
-type TasksTableProps = {
+type FeaturesTableProps = {
 	projectSlug: string;
-	tasks: Task[];
+	features: Feature[];
 };
 
-export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
+export function FeaturesTable({ projectSlug, features }: FeaturesTableProps) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 
-	const columns: ColumnDef<Task>[] = [
+	const columns: ColumnDef<Feature>[] = [
 		{
-			accessorKey: "key",
+			accessorKey: "slug",
 			header: ({ column }) => <SortableHeader column={column} title="ID" />,
 			cell: ({ row }) => (
 				<EntityRef
-					kind="task"
-					entityKey={row.original.key}
+					kind="feature"
+					entityKey={row.original.slug}
 					projectSlug={projectSlug}
 				/>
 			),
-			sortingFn: (rowA, rowB) =>
-				taskNumber(rowA.original.key) - taskNumber(rowB.original.key),
 		},
 		{
-			accessorKey: "title",
-			header: ({ column }) => <SortableHeader column={column} title="Title" />,
-			cell: ({ row }) => row.original.title,
+			accessorKey: "name",
+			header: ({ column }) => <SortableHeader column={column} title="Name" />,
+			cell: ({ row }) => row.original.name,
 		},
 		{
 			accessorKey: "description",
@@ -101,44 +93,17 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 			},
 		},
 		{
-			accessorKey: "featureSlug",
-			header: ({ column }) => (
-				<SortableHeader column={column} title="Feature" />
-			),
+			id: "status",
+			accessorFn: (feature) => feature.status?.name ?? "",
+			header: ({ column }) => <SortableHeader column={column} title="Status" />,
 			cell: ({ row }) => {
-				const featureSlug = displayValue(row.original.featureSlug);
-				return featureSlug ? (
-					<EntityRef
-						kind="feature"
-						entityKey={featureSlug}
-						projectSlug={projectSlug}
-					/>
+				const status = row.original.status;
+				return status ? (
+					<Badge variant="outline">{status.name}</Badge>
 				) : (
 					<EmptyValue />
 				);
 			},
-			sortingFn: (rowA, rowB) => {
-				const a = rowA.original.featureSlug?.trim() ?? "";
-				const b = rowB.original.featureSlug?.trim() ?? "";
-				return a.localeCompare(b);
-			},
-		},
-		{
-			id: "status",
-			accessorFn: (task) => task.status.name,
-			header: ({ column }) => <SortableHeader column={column} title="Status" />,
-			cell: ({ row }) => (
-				<Badge variant="outline">{row.original.status.name}</Badge>
-			),
-		},
-		{
-			accessorKey: "priority",
-			header: ({ column }) => (
-				<SortableHeader column={column} title="Priority" />
-			),
-			cell: ({ row }) => <PriorityBadge priority={row.original.priority} />,
-			sortingFn: (rowA, rowB) =>
-				comparePriorities(rowA.original.priority, rowB.original.priority),
 		},
 		{
 			accessorKey: "createdAt",
@@ -167,7 +132,7 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 	];
 
 	const table = useReactTable({
-		data: tasks,
+		data: features,
 		columns,
 		state: { sorting },
 		onSortingChange: setSorting,
@@ -198,7 +163,7 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 					<TableRow key={row.id}>
 						{row.getVisibleCells().map((cell) => {
 							const className =
-								cell.column.id === "title"
+								cell.column.id === "name"
 									? "max-w-64 truncate font-medium"
 									: cell.column.id === "description"
 										? "max-w-xs truncate text-muted-foreground"

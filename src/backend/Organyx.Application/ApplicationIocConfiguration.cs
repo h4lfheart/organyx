@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using Organyx.Application.Features.Repositories;
+using Organyx.Application.Features.Services;
 using Organyx.Application.Projects.Repositories;
 using Organyx.Application.Projects.Services;
 using Organyx.Application.Statuses.Repositories;
@@ -17,6 +19,9 @@ public static class ApplicationIocConfiguration
             services.AddScoped<IProjectService, ProjectService>();
 
             services.AddScoped<IStatusRepository, StatusRepository>();
+
+            services.AddScoped<IFeatureRepository, FeatureRepository>();
+            services.AddScoped<IFeatureService, FeatureService>();
 
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITaskService, TaskService>();

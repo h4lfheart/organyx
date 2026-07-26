@@ -48,7 +48,7 @@ function BreadcrumbLink({
 		props: mergeProps<"a">(
 			{
 				className: cn(
-					"inline-flex items-center transition-colors hover:text-foreground",
+					"inline-flex items-center transition-colors hover:text-foreground [&_[data-slot=entity-ref]]:font-normal [&_[data-slot=entity-ref]]:text-inherit",
 					className,
 				),
 			},
@@ -67,7 +67,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
 			data-slot="breadcrumb-page"
 			aria-current="page"
 			className={cn(
-				"inline-flex items-center font-semibold text-foreground",
+				"inline-flex items-center font-semibold text-foreground [&_[data-slot=entity-ref]]:font-semibold [&_[data-slot=entity-ref]]:text-inherit",
 				className,
 			)}
 			{...props}

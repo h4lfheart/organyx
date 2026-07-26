@@ -13,6 +13,7 @@ public record TaskResponseEntry
     public required string Key { get; init; }
     public required string Title { get; init; }
     public string? Description { get; init; }
+    public string? FeatureSlug { get; init; }
     public required TaskStatusBadge Status { get; init; }
     public required Priority Priority { get; init; }
     public required DateTimeOffset CreatedAt { get; init; }

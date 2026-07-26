@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Layers, SquareCheckBig } from "lucide-react";
+import { FolderKanban, Layers, SquareCheckBig } from "lucide-react";
 
 import { cn, interactiveRegionClassName } from "#lib/utils";
 
@@ -12,6 +12,10 @@ const entityKinds = {
 		icon: Layers,
 		iconClassName: "text-chart-5",
 	},
+	project: {
+		icon: FolderKanban,
+		iconClassName: "text-success",
+	},
 } as const;
 
 export type EntityKind = keyof typeof entityKinds;
@@ -23,7 +27,7 @@ type EntityRefBaseProps = {
 };
 
 type EntityRefLinkProps = EntityRefBaseProps & {
-	kind: "task";
+	kind: "task" | "feature" | "project";
 	projectSlug: string;
 };
 
@@ -35,6 +39,30 @@ export type EntityRefProps = EntityRefLinkProps | EntityRefStaticProps;
 
 const chipClassName =
 	"inline-flex h-5 items-center gap-1.5 text-sm leading-none font-medium text-foreground";
+
+function entityLink(
+	kind: "task" | "feature" | "project",
+	projectSlug: string,
+	entityKey: string,
+) {
+	switch (kind) {
+		case "task":
+			return {
+				to: "/projects/$projectSlug/tasks/$taskKey" as const,
+				params: { projectSlug, taskKey: entityKey },
+			};
+		case "feature":
+			return {
+				to: "/projects/$projectSlug/features/$featureSlug" as const,
+				params: { projectSlug, featureSlug: entityKey },
+			};
+		case "project":
+			return {
+				to: "/projects/$projectSlug" as const,
+				params: { projectSlug },
+			};
+	}
+}
 
 export function EntityRef({
 	kind,
@@ -52,10 +80,12 @@ export function EntityRef({
 	);
 
 	if (projectSlug) {
+		const link = entityLink(kind, projectSlug, entityKey);
 		return (
 			<Link
-				to="/projects/$projectSlug/tasks/$taskKey"
-				params={{ projectSlug, taskKey: entityKey }}
+				data-slot="entity-ref"
+				to={link.to}
+				params={link.params}
 				className={cn(chipClassName, interactiveRegionClassName, className)}
 			>
 				{content}
@@ -63,5 +93,9 @@ export function EntityRef({
 		);
 	}
 
-	return <span className={cn(chipClassName, className)}>{content}</span>;
+	return (
+		<span data-slot="entity-ref" className={cn(chipClassName, className)}>
+			{content}
+		</span>
+	);
 }

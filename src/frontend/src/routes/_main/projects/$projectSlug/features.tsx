@@ -1,10 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import { FeaturesPage } from "#components/projects/features/features-page";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_main/projects/$projectSlug/features")({
 	staticData: {
 		breadcrumb: "Features",
 	},
-	component: FeaturesPage,
+	component: FeaturesLayout,
 });
+
+function FeaturesLayout() {
+	return <Outlet />;
+}

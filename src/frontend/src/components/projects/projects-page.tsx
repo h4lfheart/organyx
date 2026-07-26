@@ -1,8 +1,6 @@
-import { Link } from "@tanstack/react-router";
-
+import { EntityRef } from "#components/shared/entity-ref";
 import { Text } from "#components/ui/text";
 import { useProjects } from "#lib/hooks/projects/use-projects";
-import { cn, interactiveRegionClassName } from "#lib/utils";
 
 export function ProjectsPage() {
 	const { data, isPending, isError } = useProjects();
@@ -27,19 +25,14 @@ export function ProjectsPage() {
 					No projects yet.
 				</Text>
 			) : (
-				<ul className="flex flex-col gap-1">
+				<ul className="flex flex-col gap-2">
 					{projects.map((project) => (
 						<li key={project.id}>
-							<Link
-								to="/projects/$projectSlug"
-								params={{ projectSlug: project.slug }}
-								className={cn(
-									"inline-flex h-7 items-center text-sm text-foreground",
-									interactiveRegionClassName,
-								)}
-							>
-								{project.name}
-							</Link>
+							<EntityRef
+								kind="project"
+								entityKey={project.slug}
+								projectSlug={project.slug}
+							/>
 						</li>
 					))}
 				</ul>

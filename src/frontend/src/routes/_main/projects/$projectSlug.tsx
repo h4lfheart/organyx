@@ -1,5 +1,6 @@
 import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 
+import { EntityRef } from "#components/shared/entity-ref";
 import { projectsQueryOptions } from "#lib/queries/projects/list";
 import type { Project } from "#lib/types";
 
@@ -18,7 +19,11 @@ export const Route = createFileRoute("/_main/projects/$projectSlug")({
 		breadcrumb: (match) => {
 			const project = (match.loaderData as { project: Project } | undefined)
 				?.project;
-			return project?.name ?? String(match.params.projectSlug ?? "Project");
+			const slug = project?.slug ?? String(match.params.projectSlug ?? "");
+
+			return {
+				label: <EntityRef kind="project" entityKey={slug} />,
+			};
 		},
 	},
 	component: ProjectLayout,

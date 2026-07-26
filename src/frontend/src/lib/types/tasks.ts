@@ -10,6 +10,7 @@ export type Task = {
 	key: string;
 	title: string;
 	description: string | null;
+	featureSlug: string | null;
 	status: TaskStatusBadge;
 	priority: Priority;
 	createdAt: string | null;
