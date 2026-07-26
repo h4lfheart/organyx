@@ -63,7 +63,8 @@ public class StatusService(
         if (request.IsDefault && !existing.IsDefault)
             await statusRepository.ClearDefaultForProjectAsync(existing.ProjectId, statusId);
 
-        _ = await statusRepository.UpdateAsync(statusId, request.Name, request.Position, request.IsDefault)
+        _ = await statusRepository.UpdateAsync(
+                statusId, request.Name, request.Position, request.IsDefault, request.IsComplete)
             ?? throw new NotFoundException("Status not found.");
     }
 

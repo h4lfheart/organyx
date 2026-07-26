@@ -12,7 +12,8 @@ public static class StatusMappers
             ProjectId = projectId,
             Name = request.Name,
             Position = request.Position,
-            IsDefault = request.IsDefault
+            IsDefault = request.IsDefault,
+            IsComplete = request.IsComplete
         };
     }
 
@@ -24,7 +25,8 @@ public static class StatusMappers
             ProjectId = status.ProjectId,
             Name = status.Name,
             Position = status.Position,
-            IsDefault = status.IsDefault
+            IsDefault = status.IsDefault,
+            IsComplete = status.IsComplete
         };
     }
 }

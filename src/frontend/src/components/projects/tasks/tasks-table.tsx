@@ -83,7 +83,15 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 		{
 			accessorKey: "title",
 			header: ({ column }) => <SortableHeader column={column} title="Title" />,
-			cell: ({ row }) => row.original.title,
+			cell: ({ row }) => (
+				<span
+					className={
+						row.original.status.isComplete ? "line-through text-muted-foreground" : undefined
+					}
+				>
+					{row.original.title}
+				</span>
+			),
 		},
 		{
 			accessorKey: "description",
@@ -128,7 +136,9 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 			accessorFn: (task) => task.status.name,
 			header: ({ column }) => <SortableHeader column={column} title="Status" />,
 			cell: ({ row }) => (
-				<Badge variant="outline">{row.original.status.name}</Badge>
+				<Badge variant={row.original.status.isComplete ? "success" : "outline"}>
+					{row.original.status.name}
+				</Badge>
 			),
 		},
 		{

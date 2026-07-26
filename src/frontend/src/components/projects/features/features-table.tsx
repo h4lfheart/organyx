@@ -75,7 +75,17 @@ export function FeaturesTable({ projectSlug, features }: FeaturesTableProps) {
 		{
 			accessorKey: "name",
 			header: ({ column }) => <SortableHeader column={column} title="Name" />,
-			cell: ({ row }) => row.original.name,
+			cell: ({ row }) => (
+				<span
+					className={
+						row.original.status?.isComplete
+							? "line-through text-muted-foreground"
+							: undefined
+					}
+				>
+					{row.original.name}
+				</span>
+			),
 		},
 		{
 			accessorKey: "description",
@@ -99,7 +109,9 @@ export function FeaturesTable({ projectSlug, features }: FeaturesTableProps) {
 			cell: ({ row }) => {
 				const status = row.original.status;
 				return status ? (
-					<Badge variant="outline">{status.name}</Badge>
+					<Badge variant={status.isComplete ? "success" : "outline"}>
+						{status.name}
+					</Badge>
 				) : (
 					<EmptyValue />
 				);

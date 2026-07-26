@@ -3,6 +3,7 @@ export type Priority = "Low" | "Medium" | "High" | "Urgent";
 export type TaskStatusBadge = {
 	id: string;
 	name: string;
+	isComplete: boolean;
 };
 
 export type Task = {

@@ -27,7 +27,8 @@ public static class TaskMappers
         public TaskStatusBadge ToBadge() => new()
         {
             Id = status.Id,
-            Name = status.Name
+            Name = status.Name,
+            IsComplete = status.IsComplete
         };
     }
 }

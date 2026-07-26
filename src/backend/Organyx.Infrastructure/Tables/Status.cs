@@ -13,4 +13,5 @@ public class Status : BaseModel
     [Column("name")] public string Name { get; set; } = string.Empty;
     [Column("position")] public int Position { get; set; }
     [Column("is_default")] public bool IsDefault { get; set; }
+    [Column("is_complete")] public bool IsComplete { get; set; }
 }

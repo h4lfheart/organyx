@@ -1,6 +1,7 @@
 export type FeatureStatusBadge = {
 	id: string;
 	name: string;
+	isComplete: boolean;
 };
 
 export type Feature = {

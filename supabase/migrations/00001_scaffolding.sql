@@ -19,7 +19,8 @@ create table status
 	project_id uuid not null references projects (id) on delete cascade,
 	name text not null,
 	position integer not null default 0,
-	is_default boolean not null default false
+	is_default boolean not null default false,
+	is_complete boolean not null default false
 );
 
 create unique index status_one_default_per_project
@@ -103,10 +104,10 @@ returns trigger
 language plpgsql
 as $$
 	begin
-		insert into status (project_id, name, position, is_default)
-		values (new.id, 'Todo', 0, true),
-			(new.id, 'In Progress', 1, false),
-			(new.id, 'Complete', 2, false);
+		insert into status (project_id, name, position, is_default, is_complete)
+		values (new.id, 'Todo', 0, true, false),
+			(new.id, 'In Progress', 1, false, false),
+			(new.id, 'Complete', 2, false, true);
 		return new;
 	end;
 $$;

@@ -24,7 +24,8 @@ public static class FeatureMappers
         public FeatureStatusBadge ToBadge() => new()
         {
             Id = status.Id,
-            Name = status.Name
+            Name = status.Name,
+            IsComplete = status.IsComplete
         };
     }
 }

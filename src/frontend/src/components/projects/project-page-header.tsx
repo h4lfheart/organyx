@@ -1,5 +1,6 @@
 import { getRouteApi } from "@tanstack/react-router";
 
+import { EntityRef } from "#components/shared/entity-ref";
 import { Text } from "#components/ui/text";
 
 const projectRoute = getRouteApi("/_main/projects/$projectSlug");
@@ -16,9 +17,13 @@ export function ProjectPageHeader({ page }: ProjectPageHeaderProps) {
 			<Text as="h1" variant="title">
 				{project.name}
 			</Text>
-			<Text as="p" variant="body" tone="secondary">
-				{page}
-			</Text>
+			{page === "Overview" ? (
+				<EntityRef kind="project" entityKey={project.slug} />
+			) : (
+				<Text as="p" variant="body" tone="secondary">
+					{page}
+				</Text>
+			)}
 		</header>
 	);
 }

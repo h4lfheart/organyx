@@ -11,7 +11,7 @@ public interface IStatusRepository
     Task<Status?> GetDefaultByProjectIdAsync(Guid projectId);
     Task ClearDefaultForProjectAsync(Guid projectId, Guid? exceptStatusId = null);
     Task<Status?> InsertAsync(Status status);
-    Task<Status?> UpdateAsync(Guid statusId, string name, int position, bool isDefault);
+    Task<Status?> UpdateAsync(Guid statusId, string name, int position, bool isDefault, bool isComplete);
     Task DeleteAsync(Guid statusId);
 }
 
@@ -61,13 +61,14 @@ public class StatusRepository(SupabaseService supabaseService) : IStatusReposito
         return result.Model;
     }
 
-    public async Task<Status?> UpdateAsync(Guid statusId, string name, int position, bool isDefault)
+    public async Task<Status?> UpdateAsync(Guid statusId, string name, int position, bool isDefault, bool isComplete)
     {
         var result = await supabaseService.Client.From<Status>()
             .Where(x => x.Id == statusId)
             .Set(x => x.Name, name)
             .Set(x => x.Position, position)
             .Set(x => x.IsDefault, isDefault)
+            .Set(x => x.IsComplete, isComplete)
             .Update();
         return result.Models.FirstOrDefault();
     }
