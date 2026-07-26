@@ -5,7 +5,7 @@ import { featuresQueryOptions } from "#lib/queries/features/list";
 
 export const Route = createFileRoute("/_main/projects/$projectSlug/features/")({
 	loader: async ({ context, params }) => {
-		await context.queryClient.ensureQueryData(
+		await context.queryClient.prefetchQuery(
 			featuresQueryOptions(params.projectSlug),
 		);
 	},

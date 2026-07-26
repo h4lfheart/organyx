@@ -1,27 +1,10 @@
-import {
-	type Column,
-	type ColumnDef,
-	flexRender,
-	getCoreRowModel,
-	getSortedRowModel,
-	type SortingState,
-	useReactTable,
-} from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { useState } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { PriorityBadge } from "#components/projects/tasks/priority-badge";
+import { DataTable } from "#components/shared/data-table";
 import { EntityRef } from "#components/shared/entity-ref";
-import { Badge } from "#components/ui/badge";
-import { Button } from "#components/ui/button";
+import { SortableHeader } from "#components/shared/sortable-table-header";
+import { StatusBadge } from "#components/shared/status-badge";
 import { displayValue, EmptyValue } from "#components/ui/empty-value";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "#components/ui/table";
 import type { Task } from "#lib/types";
 import {
 	comparePriorities,
@@ -30,53 +13,24 @@ import {
 	taskNumber,
 } from "#lib/utils";
 
-function SortableHeader({
-	column,
-	title,
-}: {
-	column: Column<Task, unknown>;
-	title: string;
-}) {
-	const sorted = column.getIsSorted();
-
-	return (
-		<Button
-			variant="ghost"
-			size="sm"
-			className="-ml-2 h-8 gap-1.5 px-2 has-data-[icon=inline-end]:pr-1.5"
-			onClick={column.getToggleSortingHandler()}
-		>
-			{title}
-			{sorted === "asc" ? (
-				<ArrowUp data-icon="inline-end" className="size-3.5" />
-			) : sorted === "desc" ? (
-				<ArrowDown data-icon="inline-end" className="size-3.5" />
-			) : (
-				<ArrowUpDown data-icon="inline-end" className="size-3.5 opacity-40" />
-			)}
-		</Button>
-	);
-}
-
 type TasksTableProps = {
 	projectSlug: string;
 	tasks: Task[];
 };
 
-export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
-	const [sorting, setSorting] = useState<SortingState>([]);
+const cellClassNames = {
+	title: "max-w-64 truncate font-medium",
+	description: "max-w-xs truncate text-muted-foreground",
+	createdAt: "whitespace-nowrap text-muted-foreground tabular-nums",
+	updatedAt: "whitespace-nowrap text-muted-foreground tabular-nums",
+};
 
+export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 	const columns: ColumnDef<Task>[] = [
 		{
 			accessorKey: "key",
 			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			cell: ({ row }) => (
-				<EntityRef
-					kind="task"
-					entityKey={row.original.key}
-					projectSlug={projectSlug}
-				/>
-			),
+			cell: ({ row }) => <EntityRef kind="task" entityKey={row.original.key} />,
 			sortingFn: (rowA, rowB) =>
 				taskNumber(rowA.original.key) - taskNumber(rowB.original.key),
 		},
@@ -86,7 +40,9 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 			cell: ({ row }) => (
 				<span
 					className={
-						row.original.status.isComplete ? "line-through text-muted-foreground" : undefined
+						row.original.status.isComplete
+							? "line-through text-muted-foreground"
+							: undefined
 					}
 				>
 					{row.original.title}
@@ -115,14 +71,16 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 			),
 			cell: ({ row }) => {
 				const featureSlug = displayValue(row.original.featureSlug);
-				return featureSlug ? (
+				if (!featureSlug) {
+					return <EmptyValue />;
+				}
+
+				return (
 					<EntityRef
 						kind="feature"
 						entityKey={featureSlug}
 						projectSlug={projectSlug}
 					/>
-				) : (
-					<EmptyValue />
 				);
 			},
 			sortingFn: (rowA, rowB) => {
@@ -135,11 +93,7 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 			id: "status",
 			accessorFn: (task) => task.status.name,
 			header: ({ column }) => <SortableHeader column={column} title="Status" />,
-			cell: ({ row }) => (
-				<Badge variant={row.original.status.isComplete ? "success" : "outline"}>
-					{row.original.status.name}
-				</Badge>
-			),
+			cell: ({ row }) => <StatusBadge status={row.original.status} />,
 		},
 		{
 			accessorKey: "priority",
@@ -176,56 +130,12 @@ export function TasksTable({ projectSlug, tasks }: TasksTableProps) {
 		},
 	];
 
-	const table = useReactTable({
-		data: tasks,
-		columns,
-		state: { sorting },
-		onSortingChange: setSorting,
-		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-	});
-
 	return (
-		<Table>
-			<TableHeader>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<TableRow key={headerGroup.id}>
-						{headerGroup.headers.map((header) => (
-							<TableHead key={header.id}>
-								{header.isPlaceholder
-									? null
-									: flexRender(
-											header.column.columnDef.header,
-											header.getContext(),
-										)}
-							</TableHead>
-						))}
-					</TableRow>
-				))}
-			</TableHeader>
-			<TableBody>
-				{table.getRowModel().rows.map((row) => (
-					<TableRow key={row.id}>
-						{row.getVisibleCells().map((cell) => {
-							const className =
-								cell.column.id === "title"
-									? "max-w-64 truncate font-medium"
-									: cell.column.id === "description"
-										? "max-w-xs truncate text-muted-foreground"
-										: cell.column.id === "createdAt" ||
-												cell.column.id === "updatedAt"
-											? "whitespace-nowrap text-muted-foreground tabular-nums"
-											: undefined;
-
-							return (
-								<TableCell key={cell.id} className={className}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</TableCell>
-							);
-						})}
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+		<DataTable
+			columns={columns}
+			data={tasks}
+			cellClassNames={cellClassNames}
+			getRowHref={(task) => `/projects/${projectSlug}/tasks/${task.key}`}
+		/>
 	);
 }

@@ -1,4 +1,8 @@
+import { EmptyState } from "#components/shared/empty-state";
 import { EntityRef } from "#components/shared/entity-ref";
+import { ErrorState } from "#components/shared/error-state";
+import { QueryState } from "#components/shared/query-state";
+import { Skeleton } from "#components/ui/skeleton";
 import { Text } from "#components/ui/text";
 import { useProjects } from "#lib/hooks/projects/use-projects";
 
@@ -12,19 +16,40 @@ export function ProjectsPage() {
 				Projects
 			</Text>
 
-			{isPending ? (
-				<Text as="p" variant="caption" tone="secondary">
-					Loading projects…
-				</Text>
-			) : isError ? (
-				<Text as="p" variant="caption" tone="secondary">
-					Could not load projects.
-				</Text>
-			) : projects.length === 0 ? (
-				<Text as="p" variant="caption" tone="secondary">
-					No projects yet.
-				</Text>
-			) : (
+			<QueryState
+				isPending={isPending}
+				isError={isError}
+				isEmpty={projects.length === 0}
+				pending={
+					<ul
+						className="flex flex-col gap-2"
+						aria-busy="true"
+						aria-label="Loading"
+					>
+						<li>
+							<Skeleton className="h-5 w-24" />
+						</li>
+						<li>
+							<Skeleton className="h-5 w-20" />
+						</li>
+						<li>
+							<Skeleton className="h-5 w-28" />
+						</li>
+					</ul>
+				}
+				error={
+					<ErrorState
+						title="Could not load projects"
+						description="Something went wrong while fetching your projects."
+					/>
+				}
+				empty={
+					<EmptyState
+						title="No projects yet"
+						description="Create a project to start organizing tasks and features."
+					/>
+				}
+			>
 				<ul className="flex flex-col gap-2">
 					{projects.map((project) => (
 						<li key={project.id}>
@@ -36,7 +61,7 @@ export function ProjectsPage() {
 						</li>
 					))}
 				</ul>
-			)}
+			</QueryState>
 		</main>
 	);
 }
